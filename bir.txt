@@ -1,0 +1,28 @@
+'''
+    st = "daddy I have lots of problems!"
+
+    print(st.find(input("Kirit:")))
+    print(st.__str__)
+'''
+# token : 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
+def defcha():
+    print("kxfjdgjfgj")
+
+f1 = defcha
+
+print(f1)
+print(type(f1))
+
+def multply(a,b):
+    return a *b
+
+
+print(multply(2,5))
+
+def multiplyby(func, num):
+    return lambda y: func(num,y)
+
+
+double=multiplyby(multply, 2)
+
+print(double(8))
