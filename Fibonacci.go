@@ -2,24 +2,20 @@ package main
 
 import "fmt"
 
+// fibonacci is a function that returns
+// a function that returns an int.
+func fibonacci() func() int {
+	fib1, fib2 := 1,1
+	return func() int{
+		fib := fib1
+		fib1, fib2 = fib2, fib1 + fib2
+		return fib
+	}
+}
 
 func main() {
-    var n int
-    fmt.Print("Enter the number of items: ")
-    fmt.Scanln(&n)
-    fib1 := 1
-    fib2 := 1
-    
-
-    fmt.Println(fib1)
-    fmt.Println(fib2)
-    
-    for i:=0; i<n; i++{
-        fib3 := fib1 + fib2
-        fmt.Println(fib3)
-        fib1 = fib2
-        fib2 = fib3
-        
-        
-    }  
+	f := fibonacci()
+	for i := 0; i < 10; i++ {
+		fmt.Println(f())
+	}
 }
