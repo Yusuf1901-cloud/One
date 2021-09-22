@@ -17,7 +17,7 @@ func (y *ContactList) Create(ph,id int, a, b, c, d string) {
 	y.LastName = b
 	y.Email = c
 	y.Position = d
-	fmt.Println("Object created!\n")
+	fmt.Println("Objects created!\n")
 }
 
 func getIDPhone(tel *ContactList) {
