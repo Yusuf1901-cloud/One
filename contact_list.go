@@ -1,57 +1,91 @@
 package main
 
-import (
-	"fmt"
-)
+import "fmt"
+
+type Contact struct {
+	ID, Phone                            int
+	FirstName, LastName, Email, Position string
+}
 
 type ContactList struct {
-	ID, Phone int
-	FirstName, LastName, Email, Position string
-	
+	contacts []Contact
+	n        int
 }
 
-func (y *ContactList) Create(ph,id int, a, b, c, d string) {
-	y.ID = ph
-	y.Phone = id
-	y.FirstName = a
-	y.LastName = b
-	y.Email = c
-	y.Position = d
-	fmt.Println("Objects created!\n")
+func (new *Contact) NewContact(a, b int, c, d, e, f string) {
+	new.ID = a
+	new.Phone = b
+	new.FirstName = c
+	new.LastName = d
+	new.Email = e
+	new.Position = f
 }
 
-func getIDPhone(tel *ContactList) {
-	
-	fmt.Printf("Your id: %v with %v phone number\n", tel.ID, tel.Phone)
-	
+func (contactList *ContactList) Create(contact *Contact) {
+
+	contactList.contacts = append(contactList.contacts, *contact)
+
 }
 
-func (up *ContactList) updateIdPhone(id, phone int){
-	up.ID = id
-	up.Phone = phone
+func get(con *Contact) string {
+
+	return fmt.Sprintf(
+		"%s %s's ID: %v and Email: %s. Now you are work at %s position. Tel: %v \n",
+		con.FirstName,
+		con.LastName,
+		con.ID,
+		con.Email,
+		con.Position,
+		con.Phone,
+	)
+
 }
 
+func (contactlist *ContactList) update(index int, newContact Contact) {
+	contactlist.contacts[index] = newContact
+}
 
-func (g *ContactList) getAll(){
-	fmt.Println("Your ID : ", g.ID)
-	fmt.Printf("Your phone: %v\n",  g.Phone)
-	fmt.Printf("You are %s  %s\n", g.FirstName, g.LastName)
-	fmt.Println("Your email:", g.Email)
-	fmt.Printf("Now you are working at UDEV company as %s position", g.Position)
+func (contactList ContactList) getAll() string {
+	que := ""
+	for i, con := range contactList.contacts {
+		que += fmt.Sprintf("\n%v: %v\n\n", i, con)
+	}
+	return que
+}
+
+func (contactList *ContactList) delete(index int) {
+	if index < len(contactList.contacts) {
+		contactList.contacts = append(contactList.contacts[:index],
+			contactList.contacts[index+1:]...)
+	}
 }
 
 func main() {
-	y := ContactList{} //fields : ID, Phone, Name, LastName, Email, Position
-	y.Create(31019, 993654858, "Xalil", "Jalilov", "xjalilov@gmail.com", "Junior developer")
-	
-	getIDPhone(&y)
-	
-	y.updateIdPhone(31419,901471901)
-	
-	fmt.Println("After Updated ID and Phone: \n")
-	
-	y.getAll()
-	
-	y = ContactList{} //delete all objects
-	
+	k := Contact{}
+	l := ContactList{}
+
+	k.NewContact(31219, 985471230, "Gafur", "Tursunov", "gtursunov@gmail.com", "Teacher")
+	l.Create(&k)
+
+	fmt.Println(get(&k))
+
+	k.NewContact(31519, 987876230, "Gafur", "Tursunov", "gtursunov@gmail.com", "Teacher")
+	l.Create(&k)
+
+	fmt.Println(l.getAll())
+
+	fmt.Println("\nAfter updated:")
+
+	k.NewContact(31319, 902100410, "Amon", "Turdiyev", "jxalilov@gmail.com", "Cheif")
+	l.update(1, k)
+	fmt.Println(l.getAll())
+
+	var n int
+	fmt.Scanln(&n)
+
+	fmt.Printf("\n Now deleting %v index of Contactlist\n", n)
+	l.delete(n)
+
+	fmt.Println("\nAfter deleting:")
+	fmt.Println(l.getAll())
 }
