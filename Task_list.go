@@ -1,75 +1,57 @@
 package main
 
-import (
-	"fmt"
-)
+import "fmt"
 
+type Task struct {
+	ID           int
+	Name, Status string
+}
 type TaskList struct {
-	ID int
-	Name, Status, Priority, CreatedAt, CreatedBy, DueDate string
+	tasks []Task
+	n     int
 }
 
-func ( cre *TaskList) Create(i int, a, b, c, d, e, f string){
-	cre.ID = i
-	cre.Name = a
-	cre.Status = b
-	cre.Priority = c
-	cre.CreatedAt = d
-	cre.CreatedBy = e
-	cre.DueDate = f
+func (task *Task) NewTask(id int, name, sta string) Task {
+	task.ID = id
+	task.Name = name
+	task.Status = sta
+
+	return *task
 }
 
-func updateIdDueDate(up *TaskList, id int, date string){
-	up.ID = id
-	up.DueDate = date
+func ReadTask(task *Task) string {
+	return fmt.Sprintf("Id: %v, Name: %s, Status: %s", task.ID, task.Name, task.Status)
 }
 
-func GetAll( get *TaskList) {
-	fmt.Println("Task Id: ", get.ID)
-	fmt.Printf("Your Task %s %s and %s\n", get.Name, get.Status, get.Priority)
-	fmt.Printf("This task created by %s at %s\n", get.CreatedAt, get.CreatedBy)
-	fmt.Printf("DueDate:%s\n\n", get.DueDate)
+func (tasklist *TaskList) Create(task Task) {
+	tasklist.tasks = append(tasklist.tasks, task)
+}
+
+func (tasklist *TaskList) ReadAll(index int) Task {
+
+	return tasklist.tasks[index]
+
+}
+
+func (tasklist *TaskList) Update(index int, newtask Task) {
+
+	if index < len(tasklist.tasks) {
+		tasklist.tasks[index] = newtask
+	}
+
 }
 
 func main() {
-	objects := []TaskList{
-		{
-			ID :546897,
-			Name: "Pascal Triangle",
-			Status: "New",
-			Priority: "Required",
-			CreatedAt: "13-01-2021",
-			CreatedBy: "Ahmadbek",
-			DueDate: "13-12-2021",
-		},
-		{
-			ID :483197,
-			Name: "Geron formula",
-			Status: "Old",
-			Priority: "Sometimes Required",
-			CreatedAt: "1800-1900",
-			CreatedBy: "Geron",
-			DueDate: "13-12-2021",
-		},
+	t := Task{}
+	tasklist := TaskList{}
+	tasklist.Create(t.NewTask(150, "Bubble Sort", "Old"))
+	tasklist.Create(t.NewTask(130, "Pascal triangle", "Almostly new"))
+	tasklist.Create(t.NewTask(120, "Pifagor theory", "Old"))
+	tasklist.Update(1, t.NewTask(110, "My theory", "Freshly new"))
+
+	for i, tas := range tasklist.tasks {
+
+		fmt.Printf("\n%v:  %v\n", i, tas)
+
 	}
-	obj := TaskList{}
-	obj.Create(
-		201369, 
-		"Pifagor theory", 
-		"Very Old", 
-		"Required", 
-		"200-300 year",
-		"Pifagor",
-		"Unlimited",
-	)
-	objects = append(objects, obj)
-	
-	updateIdDueDate(&objects[0], 517201, "01-11-2021")
-	
-	for i, obj0 := range objects{
-		fmt.Printf("\n\n%v-object:\n", i+1)
-		GetAll(&obj0)
-	}
-	
-	objects = []TaskList{} //deleting objects array
 }
