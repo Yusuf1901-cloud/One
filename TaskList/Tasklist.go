@@ -1,6 +1,9 @@
-package main
+package tasks
 
-import "fmt"
+import (
+	"errors"
+	"fmt"
+)
 
 type Task struct {
 	ID           int
@@ -8,26 +11,38 @@ type Task struct {
 }
 type TaskList struct {
 	tasks []Task
-	n     int
+	n, s  int
 }
 
-func (task *Task) NewTask(id int, name, sta string) Task {
-	task.ID = id
-	task.Name = name
-	task.Status = sta
+func NewTask(id int, name, sta string) Task {
 
-	return *task
+	return Task{id, name, sta}
+
+}
+
+func NewTaskList(size int) TaskList {
+
+	return TaskList{make([]Task, 0, size), 0, size}
+
+}
+
+func (tasklist *TaskList) Create(task Task) error {
+
+	if tasklist.n < tasklist.s {
+		tasklist.tasks = append(tasklist.tasks, task)
+		tasklist.n++
+		return nil
+	}
+	return errors.New("Stopped. Length of TaskList Out of range!!")
 }
 
 func ReadTask(task *Task) string {
+
 	return fmt.Sprintf("Id: %v, Name: %s, Status: %s", task.ID, task.Name, task.Status)
+
 }
 
-func (tasklist *TaskList) Create(task Task) {
-	tasklist.tasks = append(tasklist.tasks, task)
-}
-
-func (tasklist *TaskList) ReadAll(index int) Task {
+func (tasklist *TaskList) Read(index int) Task {
 
 	return tasklist.tasks[index]
 
@@ -40,14 +55,21 @@ func (tasklist *TaskList) Update(index int, newtask Task) {
 	}
 
 }
-
+func (taskList *TaskList) delete(index int) {
+	
+	if index < len(taskList.tasks) {
+		taskList.tasks = append(taskList.tasks[:index],
+			taskList.tasks[index+1:]...)
+	}
+}
+/*
 func main() {
-	t := Task{}
+	//t := Task{}
 	tasklist := TaskList{}
-	tasklist.Create(t.NewTask(150, "Bubble Sort", "Old"))
-	tasklist.Create(t.NewTask(130, "Pascal triangle", "Almostly new"))
-	tasklist.Create(t.NewTask(120, "Pifagor theory", "Old"))
-	tasklist.Update(1, t.NewTask(110, "My theory", "Freshly new"))
+	tasklist.Create(NewTask(150, "Bubble Sort", "Old"))
+	tasklist.Create(NewTask(130, "Pascal triangle", "Almostly new"))
+	tasklist.Create(NewTask(120, "Pifagor theory", "Old"))
+	tasklist.Update(1, NewTask(110, "My theory", "Freshly new"))
 
 	for i, tas := range tasklist.tasks {
 
@@ -55,3 +77,5 @@ func main() {
 
 	}
 }
+*/
+
