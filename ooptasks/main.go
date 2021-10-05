@@ -1,7 +1,7 @@
 package main
 
 import (
-	"ooptasks/tasks"
+	"tasks/tasks"
 )
 
 func main() {
